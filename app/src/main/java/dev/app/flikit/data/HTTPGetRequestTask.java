@@ -15,20 +15,14 @@ public class HTTPGetRequestTask extends AsyncTask<String, Integer, ApiResponse>
     private HttpCallback callbackListener;
     private int statusCode;
 
-    /**
-     * execute before http request
-     */
+
     @Override
     protected void onPreExecute()
     {
         callbackListener.onPreExecute();
     }
 
-    /**
-     * this method calls when call execute method
-     * @param params variable args parameter
-     * @return serialized response
-     */
+
     @Override
     protected ApiResponse doInBackground(String... params)
     {
@@ -102,10 +96,7 @@ public class HTTPGetRequestTask extends AsyncTask<String, Integer, ApiResponse>
         return null;
     }
 
-    /**
-     * execute after http response
-     * @param response serialized response
-     */
+
     @Override
     protected void onPostExecute(ApiResponse response)
     {
@@ -113,19 +104,14 @@ public class HTTPGetRequestTask extends AsyncTask<String, Integer, ApiResponse>
     }
 
 
-    /**
-     * HttpCallback Interface
-     */
+
     public interface HttpCallback
     {
         void onPostExecute(ApiResponse response, int statusCode);
         void onPreExecute();
     }
 
-    /**
-     * method to set http callback interface
-     * @param callbackListener HttpCallback instance
-     */
+
     public void setHttpListener(final HttpCallback callbackListener)
     {
         this.callbackListener = callbackListener;
