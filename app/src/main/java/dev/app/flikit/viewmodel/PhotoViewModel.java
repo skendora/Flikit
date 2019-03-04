@@ -2,12 +2,11 @@ package dev.app.flikit.viewmodel;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.widget.ImageView;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.BindingAdapter;
 import dev.app.flikit.data.BitmapCache;
-import dev.app.flikit.data.ImageDownloaderTask;
+import dev.app.flikit.data.DownloadImageTask;
 import dev.app.flikit.data.URIBuilder;
 import dev.app.flikit.model.Photo;
 
@@ -44,22 +43,13 @@ public class PhotoViewModel extends BaseObservable {
                 return;
             }
 
-            ImageDownloaderTask imageDownloaderTask = new ImageDownloaderTask();
-
-            imageDownloaderTask.setHttpListener(new ImageDownloaderTask.HttpCallback() {
+            new DownloadImageTask(new DownloadImageTask.Listener() {
                 @Override
-                public void onPostExecute(Bitmap result) {
-
-                    imageView.setImageBitmap(result);
+                public void onImageDownloaded(final Bitmap bitmap) {
+                    imageView.setImageBitmap(bitmap);
                 }
+            }).download(url);
 
-                @Override
-                public void onPreExecute() {
-
-                }
-            });
-
-            imageDownloaderTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, url);
         } catch (Exception e) {
             e.printStackTrace();
         }

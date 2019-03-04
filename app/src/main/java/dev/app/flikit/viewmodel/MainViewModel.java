@@ -9,7 +9,6 @@ import dev.app.flikit.data.ApiResponse;
 import dev.app.flikit.data.HTTPGetRequestTask;
 import dev.app.flikit.data.URIBuilder;
 import dev.app.flikit.model.Photo;
-import dev.app.flikit.utils.Utils;
 
 import java.util.List;
 import java.util.Observable;
@@ -23,8 +22,6 @@ public class MainViewModel extends Observable {
     private List<Photo> photoList;
     private URIBuilder url;
     private boolean isLoading;
-    Utils utils;
-
 
     public MainViewModel(Context mContext, ApiResponse response, List<Photo> photoList, URIBuilder url) {
         this.mContext = mContext;
@@ -33,10 +30,7 @@ public class MainViewModel extends Observable {
         this.url = url;
         this.progress = new ObservableInt(View.GONE);
         this.view = new ObservableInt(View.VISIBLE);
-        boolean isConnected = utils.isNetworkAvailable(mContext);
-        if (isConnected) {
-            getPhotos();
-        } else Toast.makeText(mContext, "No active internet connection", Toast.LENGTH_LONG).show();
+        getPhotos();
 
     }
 
@@ -96,10 +90,8 @@ public class MainViewModel extends Observable {
     public boolean onQueryTextSubmit(String query) {
         reset();
         url.setQuery(query);
-        if (utils.isNetworkAvailable(mContext)) {
-            getPhotos();
-        } else
-            Toast.makeText(mContext, "No active internet connection", Toast.LENGTH_LONG).show();
+
+        getPhotos();
 
         return false;
     }
@@ -115,9 +107,8 @@ public class MainViewModel extends Observable {
             if (!isLoading && responses.getPage() < responses.getPages() - 1) {//Check this logic for endless scrolling
                 this.url.setPage(responses.getPage() + 1);
                 //Log.d("Flikit", "PAGE = " + responses.getPage());
-                if (utils.isNetworkAvailable(mContext)) {
-                    getPhotos();
-                } else Toast.makeText(mContext, "No active internet connection", Toast.LENGTH_LONG).show();
+
+                getPhotos();
 
             }
         }
